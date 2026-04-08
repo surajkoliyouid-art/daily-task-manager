@@ -2,57 +2,225 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <meta name="description" content="Daily Task Manager – Organize your day efficiently with due dates and smart filtering.">
-    <title>Daily Task Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="description" content="Daily Task Manager - Modern mobile-first task management app">
+    <title>Daily Task Manager | Organize Your Day</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Preconnect for performance (optional but clean) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="app-wrapper" id="appWrapper">
+        <!-- MAIN APP CONTAINER -->
+        <main class="app-main">
+            <!-- ==================== 1. HOME DASHBOARD SCREEN ==================== -->
+            <section id="homeScreen" class="screen active-screen">
+                <div class="screen-content">
+                    <!-- Home Header -->
+                    <header class="home-header">
+                        <div class="greeting-section">
+                            <h1 class="greeting-text" id="greetingMessage">Good Morning</h1>
+                            <p class="current-date" id="currentDate">Monday, Jan 1</p>
+                        </div>
+                        <button class="notification-icon-btn" id="notificationIconBtn" aria-label="Notifications">
+                            <span class="notification-bell">🔔</span>
+                            <span class="notification-badge" id="notificationBadge">3</span>
+                        </button>
+                    </header>
 
-    <div class="app-container" data-theme="light">
-        <!-- MAIN HEADER -->
-        <header class="app-header">
-            <div class="header-title-wrapper">
-                <h1 class="app-title">📋 Daily Task Manager</h1>
-            </div>
-            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Switch dark/light mode" title="Dark mode">
-                <span class="toggle-icon">🌙</span>
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-emoji">✅</span>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="completedCount">0</h3>
+                                <p class="stat-label">Completed</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-emoji">⏳</span>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="pendingCount">0</h3>
+                                <p class="stat-label">Pending</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-emoji">📅</span>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="todayCount">0</h3>
+                                <p class="stat-label">Today's Tasks</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Today's Tasks Section -->
+                    <div class="today-section">
+                        <div class="section-header">
+                            <h2 class="section-title">📌 Today's Priority</h2>
+                            <span class="section-subtitle">What's due today</span>
+                        </div>
+                        <div class="today-tasks-list" id="todayTasksList">
+                            <!-- dynamic today tasks will appear here -->
+                            <div class="empty-tasks-placeholder">
+                                <span>🎉</span>
+                                <p>No tasks for today. Enjoy!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== 2. TASK LIST SCREEN ==================== -->
+            <section id="taskScreen" class="screen">
+                <div class="screen-content">
+                    <div class="task-header">
+                        <h1 class="task-screen-title">My Tasks</h1>
+                        <div class="filter-tabs">
+                            <button class="filter-tab active-tab" data-filter="all" id="filterAllTasks">All</button>
+                            <button class="filter-tab" data-filter="completed" id="filterCompletedTasks">Completed</button>
+                            <button class="filter-tab" data-filter="pending" id="filterPendingTasks">Pending</button>
+                        </div>
+                    </div>
+
+                    <!-- Task List Container -->
+                    <div class="tasks-container" id="tasksContainer">
+                        <ul class="tasks-list" id="tasksList">
+                            <!-- Dynamic tasks injected here -->
+                        </ul>
+                        <div class="empty-task-message" id="emptyTaskMessage" style="display: none;">
+                            <span>✨</span>
+                            <p>No tasks found</p>
+                            <small>Tap + to add a new task</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Action Button (Add Task) -->
+                <button class="fab-add-task" id="fabAddTaskBtn" aria-label="Add new task">
+                    <span class="fab-icon">+</span>
+                </button>
+            </section>
+
+            <!-- ==================== 3. SETTINGS SCREEN ==================== -->
+            <section id="settingsScreen" class="screen">
+                <div class="screen-content settings-content">
+                    <h1 class="settings-title">⚙️ Settings</h1>
+                    
+                    <!-- User Profile Section (static) -->
+                    <div class="profile-section">
+                        <div class="profile-avatar">👤</div>
+                        <div class="profile-info">
+                            <h3 class="profile-name">Task Manager User</h3>
+                            <p class="profile-email">user@taskmanager.com</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <!-- Dark Mode Toggle -->
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <span class="setting-icon">🌙</span>
+                                <span>Dark Mode</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="darkModeToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <!-- Notifications Toggle -->
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <span class="setting-icon">🔔</span>
+                                <span>Notifications</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="notificationsToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <!-- Reminder Time -->
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <span class="setting-icon">⏰</span>
+                                <span>Reminder Time</span>
+                            </div>
+                            <select id="reminderTimeSelect" class="setting-select">
+                                <option value="09:00">09:00 AM</option>
+                                <option value="12:00">12:00 PM</option>
+                                <option value="18:00" selected>06:00 PM</option>
+                                <option value="20:00">08:00 PM</option>
+                            </select>
+                        </div>
+
+                        <!-- Language Selector -->
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <span class="setting-icon">🌐</span>
+                                <span>Language</span>
+                            </div>
+                            <select id="languageSelect" class="setting-select">
+                                <option value="en">English</option>
+                                <option value="es">Español</option>
+                                <option value="fr">Français</option>
+                            </select>
+                        </div>
+
+                        <!-- About / Privacy -->
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <span class="setting-icon">ℹ️</span>
+                                <span>About & Privacy</span>
+                            </div>
+                            <button class="link-button" id="aboutPrivacyBtn">View →</button>
+                        </div>
+                    </div>
+                    <div class="app-version">Version 2.0.0 • Daily Task Manager</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ==================== BOTTOM NAVIGATION BAR ==================== -->
+        <nav class="bottom-nav">
+            <button class="nav-item active-nav" data-nav="home">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Home</span>
             </button>
-        </header>
+            <button class="nav-item" data-nav="tasks">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Tasks</span>
+            </button>
+            <button class="nav-item nav-center" id="centerAddBtn" data-nav="add">
+                <span class="nav-icon add-icon-center">+</span>
+            </button>
+            <button class="nav-item" data-nav="settings">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">Settings</span>
+            </button>
+        </nav>
+    </div>
 
-        <!-- INPUT SECTION: Task field, due date, add button -->
-        <section class="input-section" aria-label="Add new task">
-            <div class="input-group">
-                <input type="text" id="taskInput" class="task-input" placeholder="Write a task... e.g., 'Finish report'" autocomplete="off">
-                <input type="date" id="dueDateInput" class="due-date-picker">
-                <button id="addTaskBtn" class="add-task-btn">+ Add Task</button>
+    <!-- Modal for Adding Task (simple inline modal) -->
+    <div id="addTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Task</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
             </div>
-        </section>
-
-        <!-- FILTER BUTTONS: All, Completed, Pending -->
-        <div class="filter-bar" role="tablist" aria-label="Task filters">
-            <button class="filter-btn active-filter" data-filter="all" id="filterAll">All</button>
-            <button class="filter-btn" data-filter="completed" id="filterCompleted">Completed</button>
-            <button class="filter-btn" data-filter="pending" id="filterPending">Pending</button>
-        </div>
-
-        <!-- TASK LIST CONTAINER + EMPTY STATE MESSAGE -->
-        <div class="task-list-wrapper">
-            <ul id="taskList" class="task-list"></ul>
-            <div id="emptyState" class="empty-state">
-                <span class="empty-icon">📭</span>
-                <p>No tasks yet. Add your first task above!</p>
+            <div class="modal-body">
+                <input type="text" id="modalTaskTitle" placeholder="Task title" class="modal-input">
+                <input type="time" id="modalTaskTime" class="modal-input">
+                <select id="modalTaskPriority" class="modal-input">
+                    <option value="Low">🟢 Low Priority</option>
+                    <option value="Medium" selected>🟡 Medium Priority</option>
+                    <option value="High">🔴 High Priority</option>
+                </select>
+                <input type="date" id="modalTaskDate" class="modal-input">
+            </div>
+            <div class="modal-footer">
+                <button id="saveTaskBtn" class="save-task-btn">Add Task</button>
             </div>
         </div>
-
-        <!-- optional footer for extra polish (not required but enhances semantic flow) -->
-        <footer class="app-footer">
-            <p>✔️ Stay productive — tasks persist until you delete them</p>
-        </footer>
     </div>
 
     <script src="script.js"></script>
